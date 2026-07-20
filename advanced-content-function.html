@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content &amp; Function Words — Advanced Pronunciation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#06091a;overflow:hidden;height:100vh;width:100vw}
+#app{width:100vw;height:100vh;display:flex;flex-direction:column}
+#progress{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,#00695C,#4DB6AC);z-index:99;transition:width .3s ease;border-radius:0 3px 3px 0}
+#slides{flex:1;position:relative;overflow:hidden;min-height:0}
+.slide{position:absolute;inset:0;display:none;flex-direction:column}
+.slide.active{display:flex}
+
+/* NAV */
+#nav{height:48px;background:#060714;display:flex;align-items:center;justify-content:center;gap:14px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.08)}
+#nav button{background:rgba(255,255,255,.1);border:none;color:#fff;font-size:13px;padding:6px 20px;border-radius:20px;cursor:pointer;transition:background .2s;font-family:inherit;letter-spacing:.3px}
+#nav button:hover{background:rgba(255,255,255,.22)}
+#nav button:disabled{opacity:.25;cursor:default}
+#counter{color:rgba(255,255,255,.45);font-size:12px;min-width:60px;text-align:center}
+
+/* SHARED */
+.s-head{padding:12px 30px;font-size:16px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;flex-shrink:0;letter-spacing:.2px}
+.badge{background:rgba(255,255,255,.16);border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600}
+.s-body{flex:1;display:flex;padding:0 26px 12px;gap:22px;min-height:0;overflow:hidden}
+.student-badge{background:#00695C;color:#fff;border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;flex-shrink:0}
+
+/* TITLE */
+.title-slide{background:linear-gradient(140deg,#06091a 0%,#00352e 55%,#06091a 100%);align-items:center;justify-content:center;text-align:center}
+.title-slide h1{font-size:clamp(30px,5vw,66px);font-weight:900;color:#fff;line-height:1;letter-spacing:-2px}
+.title-slide h1 em{font-style:normal;background:linear-gradient(90deg,#26A69A,#80CBC4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.title-sub{font-size:clamp(13px,1.7vw,19px);color:rgba(255,255,255,.6);margin-top:12px}
+.goal-box{margin-top:22px;background:rgba(0,105,92,.09);border:1.5px solid rgba(0,105,92,.35);border-radius:16px;padding:16px 28px;display:inline-block;text-align:left}
+.goal-box p{color:#B2DFDB;font-size:clamp(13px,1.5vw,17px);line-height:1.75}
+.adv-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 16px;font-size:clamp(11px,1.2vw,13px);color:rgba(255,255,255,.5);margin-bottom:14px;letter-spacing:1px;text-transform:uppercase}
+
+/* WARM-UP */
+.warmup-slide{background:#fff;flex-direction:column}
+.warmup-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 40px;gap:18px}
+.warmup-prompt{background:#E0F2F1;border-left:5px solid #00695C;border-radius:0 14px 14px 0;padding:18px 26px;font-size:clamp(14px,1.8vw,20px);font-weight:600;color:#004D40;max-width:820px;width:100%;line-height:1.5}
+.warmup-sentence{font-size:clamp(18px,2.8vw,34px);font-weight:900;color:#00695C;background:#F0FDF9;border-radius:12px;padding:16px 32px;letter-spacing:.5px}
+.warmup-cues{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;max-width:820px;width:100%}
+.warmup-q{background:#F5F5F5;border-radius:10px;padding:10px 16px;font-size:clamp(12px,1.4vw,15px);color:#555;border:1.5px solid #e0e0e0;flex:1;min-width:200px}
+.teacher-note{background:#FFF3E0;border:1px solid #FFB74D;border-radius:10px;padding:10px 18px;font-size:clamp(11px,1.25vw,14px);color:#E65100;max-width:820px;width:100%;line-height:1.6}
+
+/* KEY CONCEPT */
+.concept-slide{background:#fff;flex-direction:column}
+.concept-body{flex:1;display:flex;gap:18px;padding:14px 26px 14px;min-height:0}
+.concept-col{flex:1;display:flex;flex-direction:column;gap:10px;min-height:0}
+.concept-card{border-radius:14px;padding:16px 20px;flex:1;overflow:hidden}
+.cc-title{font-size:clamp(13px,1.5vw,18px);font-weight:900;margin-bottom:8px;line-height:1.3}
+.cc-sub{font-size:clamp(11px,1.2vw,13px);opacity:.7;margin-bottom:10px;line-height:1.5}
+.cc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.cc-tag{border-radius:8px;padding:4px 12px;font-size:clamp(10px,1.05vw,12px);font-weight:700}
+.cc-examples{display:flex;flex-direction:column;gap:4px}
+.cc-ex{font-size:clamp(11px,1.2vw,14px);line-height:1.6}
+.concept-rule{background:#E0F2F1;border-radius:12px;padding:11px 18px;font-size:clamp(12px,1.3vw,15px);color:#004D40;font-weight:600;text-align:center;flex-shrink:0}
+
+/* SPOT IT */
+.spot-slide{background:#f8f9fa;flex-direction:column}
+.spot-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;overflow-y:auto}
+.spot-box{background:#fff;border-radius:12px;padding:12px 16px;border:1.5px solid #e0e0e0;display:flex;flex-direction:column;gap:6px}
+.spot-sent{font-size:clamp(13px,1.5vw,17px);color:#222;line-height:1.55;font-weight:500}
+.spot-reveal-btn{align-self:flex-start;background:#00695C;color:#fff;border:none;border-radius:8px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s}
+.spot-reveal-btn:hover{background:#004D40}
+.spot-ans{display:none;background:#E0F2F1;border-radius:8px;padding:8px 12px}
+.spot-ans.open{display:block}
+.cw{color:#00695C;font-weight:900}
+
+/* TRY IT */
+.tryit-slide{background:#f8f9fa;flex-direction:column}
+.tryit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;overflow:hidden}
+.tryit-card{background:#fff;border-radius:12px;padding:12px 16px;border:1.5px solid #e0e0e0;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.tryit-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00695C;opacity:.7}
+.tryit-sent{font-size:clamp(13px,1.6vw,18px);color:#222;line-height:1.6}
+.tryit-sent .cw{color:#00695C;font-weight:900}
+.tryit-sent .fw{color:#bbb}
+.tryit-note{font-size:clamp(10px,1.1vw,12px);color:#888;font-style:italic}
+
+/* COMPARE */
+.compare-grid{display:flex;flex-direction:column;gap:12px;flex:1;overflow:hidden;justify-content:space-evenly}
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.compare-box{border-radius:12px;padding:12px 18px}
+.compare-box.wrong{background:#FFEBEE;border:1.5px solid #FFCDD2}
+.compare-box.right{background:#E0F2F1;border:1.5px solid #A5D6A7}
+.compare-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.compare-box.wrong .compare-label{color:#C62828}
+.compare-box.right .compare-label{color:#2E7D32}
+.compare-sent{font-size:clamp(13px,1.5vw,17px);line-height:1.6;color:#222}
+.compare-sent .cw{color:#00695C;font-weight:900}
+.compare-sent .fw-wrong{color:#C62828;font-weight:900}
+
+/* ROLE-PLAY */
+.roleplay-slide{background:#0d1a18;flex-direction:column}
+.rp-body{flex:1;display:flex;flex-direction:column;gap:10px;padding:12px 26px 12px;min-height:0;overflow:hidden}
+.rp-scenario{background:rgba(255,255,255,.06);border-radius:12px;padding:10px 18px;font-size:clamp(12px,1.3vw,14px);color:rgba(255,255,255,.75);flex-shrink:0;line-height:1.5}
+.rp-cols{display:grid;grid-template-columns:3fr 2fr;gap:14px;flex:1;min-height:0;overflow:hidden}
+.rp-col{background:rgba(255,255,255,.04);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:5px;overflow-y:auto}
+.rp-col-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px;flex-shrink:0;color:#80CBC4}
+.rp-line{padding:5px 8px;border-radius:8px;display:flex;flex-direction:column;gap:2px}
+.rp-line.teacher{background:rgba(255,255,255,.04)}
+.rp-line.student{background:rgba(0,105,92,.2);border:1px solid rgba(0,105,92,.3)}
+.rp-speaker{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.5}
+.rp-text{font-size:clamp(11px,1.35vw,14px);color:#fff;line-height:1.5}
+.rp-text .cw{color:#4DB6AC;font-weight:900}
+.rp-tip{background:rgba(0,105,92,.12);border:1px solid rgba(0,105,92,.3);border-radius:10px;padding:8px 14px;font-size:clamp(11px,1.2vw,13px);color:#80CBC4;flex-shrink:0}
+.rp-tips-list{display:flex;flex-direction:column;gap:8px;font-size:clamp(11px,1.25vw,13px);color:rgba(255,255,255,.7)}
+
+/* BUILD IT */
+.build-slide{background:#fff;flex-direction:column}
+.build-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 40px;gap:16px}
+.build-prompt{background:#E0F2F1;border-radius:14px;padding:18px 26px;max-width:760px;width:100%;text-align:center}
+.build-prompt h2{font-size:clamp(15px,1.9vw,22px);font-weight:800;color:#004D40;margin-bottom:8px}
+.build-prompt p{font-size:clamp(12px,1.4vw,16px);color:#00695C;line-height:1.6}
+.build-steps{display:flex;gap:12px;max-width:760px;width:100%}
+.build-step{background:#F5F5F5;border-radius:12px;padding:12px 16px;flex:1;text-align:center}
+.build-step-num{font-size:clamp(22px,3vw,36px);font-weight:900;color:#00695C;line-height:1}
+.build-step-text{font-size:clamp(11px,1.2vw,13px);color:#555;margin-top:4px;line-height:1.4}
+.build-example{background:#F0FDF9;border-radius:10px;padding:12px 18px;max-width:760px;width:100%;font-size:clamp(12px,1.3vw,15px);color:#004D40;line-height:1.8}
+
+/* QUIZ */
+.quizq-slide{background:#f8f9fa;flex-direction:column}
+.q-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 14px;width:100%}
+.q-box{background:#fff;border-radius:12px;padding:12px 16px;border:1.5px solid #e0e0e0;display:flex;flex-direction:column;gap:5px}
+.q-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00695C;opacity:.8}
+.q-text{font-size:clamp(12px,1.3vw,15px);font-weight:600;color:#222;line-height:1.45}
+.q-opts{display:flex;flex-direction:column;gap:3px}
+.q-opt{font-size:clamp(11px,1.15vw,13px);color:#555;padding:2px 0;line-height:1.4}
+.q-reveal-btn{align-self:flex-start;background:#00695C;color:#fff;border:none;border-radius:8px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:2px}
+.q-reveal-btn:hover{background:#004D40}
+.q-ans-reveal{display:none;background:#E0F2F1;border-radius:8px;padding:8px 12px;margin-top:4px}
+.q-ans-reveal.open{display:block}
+.qr-opts{display:flex;flex-direction:column;gap:3px;margin-bottom:5px}
+.qr-opt{font-size:clamp(11px,1.15vw,13px);color:#555;padding:2px 6px;border-radius:5px}
+.qr-opt.correct{background:#00695C;color:#fff;font-weight:700}
+.qr-hint{font-size:clamp(10px,1.1vw,12px);color:#004D40;line-height:1.5}
+.think-banner{background:#E0F2F1;border-radius:10px;padding:8px 16px;font-size:clamp(12px,1.3vw,14px);color:#004D40;font-weight:600;flex-shrink:0}
+
+/* SUMMARY */
+.summary-slide{background:linear-gradient(140deg,#06091a 0%,#00352e 55%,#06091a 100%);flex-direction:column}
+.sum-cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.sum-card{border-radius:16px;padding:20px 22px;min-width:180px;max-width:260px;flex:1}
+.sum-card-icon{font-size:clamp(26px,3.5vw,42px);margin-bottom:8px}
+.sum-card-title{font-size:clamp(13px,1.5vw,18px);font-weight:800;color:#fff;margin-bottom:6px;line-height:1.3}
+.sum-card-body{font-size:clamp(11px,1.2vw,13px);color:rgba(255,255,255,.7);line-height:1.5}
+.sum-foot{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 22px;font-size:clamp(12px,1.3vw,14px);color:rgba(255,255,255,.6);text-align:center;max-width:720px}
+
+/* FREE CONV */
+.freeconv-slide{background:#0d1a18;flex-direction:column}
+.fc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 40px;gap:14px}
+.fc-badge{background:rgba(0,105,92,.3);border:1px solid rgba(0,105,92,.5);border-radius:20px;padding:4px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#80CBC4}
+.fc-topic{font-size:clamp(22px,3.5vw,46px);font-weight:900;color:#fff;letter-spacing:-1px}
+.fc-questions{display:flex;flex-direction:column;gap:8px;width:100%;max-width:720px}
+.fc-q{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 16px;font-size:clamp(13px,1.5vw,16px);color:rgba(255,255,255,.8);line-height:1.55}
+.fc-note{font-size:clamp(11px,1.2vw,13px);color:rgba(255,255,255,.4);text-align:center;max-width:680px;line-height:1.6}
+.fc-teacher{background:rgba(0,105,92,.1);border:1px solid rgba(0,105,92,.25);border-radius:10px;padding:10px 16px;font-size:clamp(11px,1.2vw,13px);color:#80CBC4;max-width:720px;width:100%;line-height:1.6}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="progress"></div>
+  <div id="slides"></div>
+  <div id="nav">
+    <button id="prevBtn" onclick="move(-1)">◀ Back</button>
+    <span id="counter"></span>
+    <button id="nextBtn" onclick="move(1)">Next ▶</button>
+  </div>
+</div>
+<script>
+// ═══════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════
+const SPOT = [
+  {sent:'I went to the store and bought some bread.',
+   marked:'I <span class="cw">WENT</span> to the <span class="cw">STORE</span> and <span class="cw">BOUGHT</span> some <span class="cw">BREAD</span>.',
+   answer:'went (verb) / store (noun) / bought (verb) / bread (noun)'},
+  {sent:"She can't find her keys anywhere.",
+   marked:'She <span class="cw">CAN\'T</span> <span class="cw">FIND</span> her <span class="cw">KEYS</span> <span class="cw">ANYWHERE</span>.',
+   answer:"can't (neg. aux) / find (verb) / keys (noun) / anywhere (adverb)"},
+  {sent:'We should meet at the coffee shop on Friday.',
+   marked:'We should <span class="cw">MEET</span> at the <span class="cw">COFFEE</span> <span class="cw">SHOP</span> on <span class="cw">FRIDAY</span>.',
+   answer:'meet (verb) / coffee shop (noun) / Friday (noun)'},
+  {sent:"Do you think he'll come to the party tonight?",
+   marked:'Do you <span class="cw">THINK</span> he\'ll <span class="cw">COME</span> to the <span class="cw">PARTY</span> <span class="cw">TONIGHT</span>?',
+   answer:'think (verb) / come (verb) / party (noun) / tonight (adverb)'},
+  {sent:'The weather has been really cold this week.',
+   marked:'The <span class="cw">WEATHER</span> has been <span class="cw">REALLY</span> <span class="cw">COLD</span> this <span class="cw">WEEK</span>.',
+   answer:'weather (noun) / really (adverb) / cold (adjective) / week (noun)'},
+  {sent:"I'd love to try a different kind of food.",
+   marked:'I\'d <span class="cw">LOVE</span> to <span class="cw">TRY</span> a <span class="cw">DIFFERENT</span> <span class="cw">KIND</span> of <span class="cw">FOOD</span>.',
+   answer:'love (verb) / try (verb) / different (adj) / kind (noun) / food (noun)'},
+];
+
+const TRY1 = [
+  {sent:'I <b>WENT</b> to the <b>STORE</b> and <b>BOUGHT</b> some <b>BREAD</b>.',        note:'went=verb / store=noun / bought=verb / bread=noun'},
+  {sent:"She <b>CAN'T FIND</b> her <b>KEYS</b> <b>ANYWHERE</b>.",                       note:"can't=neg.aux / find=verb / keys=noun / anywhere=adverb"},
+  {sent:'We should <b>MEET</b> at the <b>COFFEE SHOP</b> on <b>FRIDAY</b>.',             note:'meet=verb / coffee shop=noun / friday=noun'},
+  {sent:'The <b>WEATHER</b> has been really <b>COLD</b> this <b>WEEK</b>.',              note:'weather=noun / cold=adj / week=noun'},
+  {sent:'Can you <b>SEND</b> me the <b>REPORT</b> by <b>MONDAY</b>?',                   note:'send=verb / report=noun / monday=noun'},
+  {sent:"They're <b>PLANNING</b> a <b>TRIP</b> to <b>JAPAN</b> next <b>YEAR</b>.",      note:'planning=verb / trip=noun / japan=noun / year=noun'},
+  {sent:"I <b>NEED</b> a <b>NEW PHONE</b> — mine <b>BROKE</b>.",                        note:'need=verb / new=adj / phone=noun / broke=verb'},
+  {sent:'She <b>LOOKED</b> really <b>TIRED</b> at the <b>MEETING</b>.',                 note:'looked=verb / tired=adj / meeting=noun'},
+];
+
+const TRY2 = [
+  {wrongHTML:'I <span class="fw-wrong">WANT</span> <span class="fw-wrong">TO</span> <span class="fw-wrong">GO</span> <span class="fw-wrong">TO</span> <span class="fw-wrong">THE</span> <span class="fw-wrong">PARK</span>.',
+   rightHTML:'I want to <span class="cw">GO</span> to the <span class="cw">PARK</span>.',
+   note:'"go" (verb) & "park" (noun) = content words'},
+  {wrongHTML:'<span class="fw-wrong">I</span> <span class="fw-wrong">CAN</span> <span class="fw-wrong">SEE</span> <span class="fw-wrong">THE</span> <span class="fw-wrong">BIG</span> <span class="fw-wrong">BLUE</span> <span class="fw-wrong">SKY</span>.',
+   rightHTML:'I can <span class="cw">SEE</span> the <span class="cw">BIG BLUE SKY</span>.',
+   note:'"see" (verb), "big" (adj), "blue" (adj), "sky" (noun)'},
+  {wrongHTML:'<span class="fw-wrong">SHE</span> <span class="fw-wrong">HAS</span> <span class="fw-wrong">BEEN</span> <span class="fw-wrong">WORKING</span> <span class="fw-wrong">VERY</span> <span class="fw-wrong">HARD</span>.',
+   rightHTML:'She has been <span class="cw">WORKING</span> very <span class="cw">HARD</span>.',
+   note:'"working" (verb) & "hard" (adverb) = content words'},
+  {wrongHTML:'<span class="fw-wrong">DO</span> <span class="fw-wrong">YOU</span> <span class="fw-wrong">WANT</span> <span class="fw-wrong">TO</span> <span class="fw-wrong">COME</span> <span class="fw-wrong">WITH</span> <span class="fw-wrong">US</span> <span class="fw-wrong">FOR</span> <span class="fw-wrong">DINNER</span>?',
+   rightHTML:'Do you <span class="cw">WANT</span> to <span class="cw">COME</span> with us for <span class="cw">DINNER</span>?',
+   note:'"want" (verb), "come" (verb), "dinner" (noun)'},
+];
+
+const ROLEPLAY = [
+  {role:'teacher', label:'Teacher (Shop Assistant)', text:'Hi there! Can I help you find anything?'},
+  {role:'student', label:'Student (Customer)',        text:'Yes, I\'m <span class="cw">LOOKING</span> for a <span class="cw">JACKET</span>. Something <span class="cw">WARM</span>.'},
+  {role:'teacher', label:'Teacher',                  text:'Sure! What size are you?'},
+  {role:'student', label:'Student',                  text:'I <span class="cw">NEED</span> a <span class="cw">MEDIUM</span>, I <span class="cw">THINK</span>.'},
+  {role:'teacher', label:'Teacher',                  text:'We have some great options over here. This one\'s very popular.'},
+  {role:'student', label:'Student',                  text:'Oh, that <span class="cw">LOOKS NICE</span>. How <span class="cw">MUCH</span> is it?'},
+  {role:'teacher', label:'Teacher',                  text:'That one\'s sixty dollars.'},
+  {role:'student', label:'Student',                  text:'Hmm, that\'s a bit <span class="cw">EXPENSIVE</span>. Do you have anything <span class="cw">CHEAPER</span>?'},
+  {role:'teacher', label:'Teacher',                  text:'Of course! This one\'s only forty.'},
+  {role:'student', label:'Student',                  text:'<span class="cw">PERFECT</span>. I\'ll <span class="cw">TAKE</span> it, <span class="cw">THANKS</span>!'},
+];
+
+const QUIZ = [
+  {q:'Which of these is a content word（内容語）?',
+   opts:['a) the','b) and','c) coffee','d) to'], ans:2,
+   hint:'"coffee" is a noun — it carries meaning. "the", "and", "to" are function words（機能語）that show grammar.'},
+  {q:'Which of these is a function word（機能語）?',
+   opts:['a) beautiful','b) running','c) quickly','d) although'], ans:3,
+   hint:'"although" is a conjunction — it connects ideas but carries no content meaning. The others (beautiful, running, quickly) all carry meaning.'},
+  {q:'In "I want to buy a new laptop", which words should be stressed?',
+   opts:['a) I, to, a','b) want, buy, new, laptop','c) I, want, to, buy','d) all words equally'], ans:1,
+   hint:'Verbs (want, buy), adjectives (new), and nouns (laptop) are content words. "I", "to", "a" are function words — they stay soft.'},
+  {q:'Why do we stress content words（内容語）in natural speech?',
+   opts:['a) They are longer words','b) They carry the main meaning','c) They come first in the sentence','d) They sound nicer'], ans:1,
+   hint:'Content words carry meaning. Function words just show grammar — they can be weakened or reduced in natural speech.'},
+  {q:'How do native speakers say "I want to go"?',
+   opts:["a) I WANT TO GO (all equal)","b) i WANT tə GO (want & go stressed)","c) I WANT to go (only want stressed)","d) i want to GO (only go stressed)"], ans:1,
+   hint:'"want" (verb) and "go" (verb) are both content words → both get stress. "I" and "to" are function words → "to" reduces to /tə/.'},
+  {q:'Which sentence has the CORRECT natural stress pattern?',
+   opts:['a) I WENT TO THE STORE','b) I went TO the STORE','c) I WENT to the STORE','d) i went to the store'], ans:2,
+   hint:'"went" (verb) and "store" (noun) are content words → they get stress. "to" and "the" are function words → they stay weak.'},
+];
+
+// ═══════════════════════════════════════════
+//  BUILDERS
+// ═══════════════════════════════════════════
+function titleHTML(){
+  return `<div class="slide title-slide">
+  <div style="max-width:820px;padding:18px;text-align:center">
+    <div class="adv-badge">Advanced Pronunciation</div>
+    <h1><em>Content &amp; Function Words</em></h1>
+    <div style="font-size:clamp(16px,2.5vw,28px);font-weight:700;color:rgba(255,255,255,.45);margin-top:4px">（内容語と機能語）</div>
+    <p class="title-sub">Which words do you stress — and which ones disappear?</p>
+    <div class="goal-box">
+      <p>🎯 <strong>Today's Goal:</strong> Identify content &amp; function words and stress them correctly in natural speech</p>
+      <p style="margin-top:4px">⏱ 45 minutes &nbsp;·&nbsp; 11 slides &nbsp;·&nbsp; Use ◀ ▶ or arrow keys to navigate</p>
+    </div>
+  </div></div>`;
+}
+
+function warmupHTML(){
+  return `<div class="slide warmup-slide">
+  <div class="s-head" style="background:#00695C">Warm-Up <span class="badge">You speak first! 🗣️</span> <span class="student-badge">Student · 3 min</span></div>
+  <div class="warmup-body">
+    <div class="warmup-prompt">Say this sentence naturally — don't overthink it:</div>
+    <div class="warmup-sentence">"I want to go to the park."</div>
+    <div class="warmup-cues">
+      <div class="warmup-q">💬 Which words felt <strong>stronger</strong> when you said it?</div>
+      <div class="warmup-q">💬 Which words were <strong>short and fast</strong>?</div>
+      <div class="warmup-q">💬 Say it again — does it feel natural?</div>
+    </div>
+    <div class="teacher-note">📝 <strong>Teacher note:</strong> Just listen — don't correct yet. Notice which words the student naturally stresses. We'll explore why on the next slide.</div>
+  </div></div>`;
+}
+
+function conceptHTML(){
+  return `<div class="slide concept-slide">
+  <div class="s-head" style="background:#00695C">Key Concept — Content vs Function Words <span class="badge">Teacher · 2 min</span></div>
+  <div class="concept-body">
+    <div class="concept-col">
+      <div class="concept-card" style="background:#E0F2F1;border:2px solid rgba(0,105,92,.25)">
+        <div class="cc-title" style="color:#004D40">📢 Content Words（内容語）— STRESS these</div>
+        <div class="cc-sub">These carry the <strong>main meaning</strong>. Say them louder, longer, and higher in pitch.</div>
+        <div class="cc-tags">
+          <span class="cc-tag" style="background:#00695C;color:#fff">Nouns 名詞</span>
+          <span class="cc-tag" style="background:#00695C;color:#fff">Main Verbs 動詞</span>
+          <span class="cc-tag" style="background:#00695C;color:#fff">Adjectives 形容詞</span>
+          <span class="cc-tag" style="background:#00695C;color:#fff">Adverbs 副詞</span>
+          <span class="cc-tag" style="background:#004D40;color:#fff">Negative Auxiliaries 否定助動詞</span>
+        </div>
+        <div class="cc-examples">
+          <div class="cc-ex">🐈 <strong>cat</strong>, <strong>Friday</strong>, <strong>coffee</strong> — nouns</div>
+          <div class="cc-ex">🏃 <strong>run</strong>, <strong>bought</strong>, <strong>love</strong> — verbs</div>
+          <div class="cc-ex">🌟 <strong>tired</strong>, <strong>cold</strong>, <strong>new</strong> — adjectives</div>
+          <div class="cc-ex">🚫 <strong>don't</strong>, <strong>can't</strong>, <strong>won't</strong> — neg. auxiliaries</div>
+        </div>
+      </div>
+    </div>
+    <div class="concept-col">
+      <div class="concept-card" style="background:#F5F5F5;border:2px solid #e0e0e0">
+        <div class="cc-title" style="color:#666">🔇 Function Words（機能語）— reduce these</div>
+        <div class="cc-sub">These show <strong>grammar</strong>. Keep them short and fast — they fade into the background.</div>
+        <div class="cc-tags">
+          <span class="cc-tag" style="background:#9E9E9E;color:#fff">Articles 冠詞</span>
+          <span class="cc-tag" style="background:#9E9E9E;color:#fff">Prepositions 前置詞</span>
+          <span class="cc-tag" style="background:#9E9E9E;color:#fff">Pronouns 代名詞</span>
+          <span class="cc-tag" style="background:#9E9E9E;color:#fff">Auxiliaries 助動詞</span>
+          <span class="cc-tag" style="background:#757575;color:#fff">Conjunctions 接続詞</span>
+        </div>
+        <div class="cc-examples">
+          <div class="cc-ex" style="color:#888">📄 <em>a</em>, <em>an</em>, <em>the</em> — articles</div>
+          <div class="cc-ex" style="color:#888">📍 <em>to</em>, <em>at</em>, <em>for</em>, <em>in</em> — prepositions</div>
+          <div class="cc-ex" style="color:#888">👤 <em>I</em>, <em>he</em>, <em>she</em>, <em>they</em> — pronouns</div>
+          <div class="cc-ex" style="color:#888">🔗 <em>and</em>, <em>but</em>, <em>or</em>, <em>so</em> — conjunctions</div>
+        </div>
+      </div>
+      <div class="concept-rule">💡 Spotlight rule 🔦 — shine it on the words that <strong>matter most</strong>. The rest stay in the shadows!</div>
+    </div>
+  </div></div>`;
+}
+
+function spotHTML(){
+  const boxes = SPOT.map((s,i)=>{
+    const id=`spot-${i}`;
+    return `<div class="spot-box">
+      <div class="spot-sent">${s.sent}</div>
+      <button class="spot-reveal-btn" onclick="toggleAns(this,'${id}')">▼ 答えを見る</button>
+      <div class="spot-ans" id="${id}">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00695C;margin-bottom:4px">Content words:</div>
+        <div style="font-size:clamp(12px,1.35vw,15px);margin-bottom:4px">${s.marked}</div>
+        <div style="font-size:clamp(10px,1.1vw,12px);color:#555">${s.answer}</div>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="slide spot-slide">
+  <div class="s-head" style="background:#00695C">Spot It — Find the content words! <span class="badge">Student 🗣️</span></div>
+  <div class="s-body" style="flex-direction:column;gap:8px">
+    <div style="font-size:clamp(12px,1.4vw,14px);color:#555;flex-shrink:0">Read each sentence aloud. <strong>Which words are content words?</strong> Press ▼ to check your answer.</div>
+    <div class="spot-grid">${boxes}</div>
+  </div></div>`;
+}
+
+function tryit1HTML(){
+  const cards = TRY1.map((t,i)=>`
+    <div class="tryit-card">
+      <div class="tryit-num">Sentence ${i+1}</div>
+      <div class="tryit-sent">${t.sent.replace(/<b>(.*?)<\/b>/g,'<span class="cw">$1</span>')}</div>
+      <div class="tryit-note">${t.note}</div>
+    </div>`).join('');
+  return `<div class="slide tryit-slide">
+  <div class="s-head" style="background:#00695C">Try It #1 — Read aloud, stress the <span style="color:#4DB6AC;font-weight:900">GREEN</span> words <span class="badge">Student 🗣️</span></div>
+  <div class="s-body" style="flex-direction:column;gap:8px">
+    <div style="font-size:clamp(12px,1.4vw,14px);color:#555;flex-shrink:0"><strong>Stress the green words</strong> — louder, longer, higher pitch. Function words should be soft and fast.</div>
+    <div class="tryit-grid">${cards}</div>
+  </div></div>`;
+}
+
+function tryit2HTML(){
+  const rows = TRY2.map(t=>`
+    <div class="compare-row">
+      <div class="compare-box wrong">
+        <div class="compare-label">❌ Flat (sounds robotic)</div>
+        <div class="compare-sent">${t.wrongHTML}</div>
+      </div>
+      <div class="compare-box right">
+        <div class="compare-label">✅ Natural English stress</div>
+        <div class="compare-sent">${t.rightHTML}</div>
+        <div style="font-size:clamp(10px,1.1vw,11px);color:#2E7D32;margin-top:5px">👉 ${t.note}</div>
+      </div>
+    </div>`).join('');
+  return `<div class="slide tryit-slide">
+  <div class="s-head" style="background:#004D40">Try It #2 — Flat vs natural stress <span class="badge">Student 🗣️</span></div>
+  <div class="s-body" style="flex-direction:column;gap:8px">
+    <div style="font-size:clamp(12px,1.4vw,14px);color:#555;flex-shrink:0">Say both versions. <strong>Notice the difference!</strong> The natural version sounds alive — the flat version sounds like a robot. Try each 2×.</div>
+    <div class="compare-grid">${rows}</div>
+  </div></div>`;
+}
+
+function roleplayHTML(){
+  const lines = ROLEPLAY.map(l=>`
+    <div class="rp-line ${l.role}">
+      <div class="rp-speaker">${l.label}</div>
+      <div class="rp-text">${l.text}</div>
+    </div>`).join('');
+  return `<div class="slide roleplay-slide">
+  <div class="s-head" style="background:#00352e">Role-Play 🎭 Shopping <span class="badge">Student leads · 8 min</span></div>
+  <div class="rp-body">
+    <div class="rp-scenario">📍 <strong>Scenario:</strong> You are shopping for a winter jacket. Teacher = Shop Assistant. You = Customer. Your lines are highlighted in teal — stress the <span style="color:#4DB6AC;font-weight:700">GREEN words</span> naturally!</div>
+    <div class="rp-cols">
+      <div class="rp-col">
+        <div class="rp-col-label">Full Dialogue</div>
+        ${lines}
+      </div>
+      <div class="rp-col">
+        <div class="rp-col-label">Your Tips</div>
+        <div class="rp-tips-list">
+          <div>🎯 Your lines are <span style="background:rgba(0,105,92,.3);padding:1px 8px;border-radius:4px">highlighted in teal</span></div>
+          <div>📢 <span style="color:#4DB6AC;font-weight:700">GREEN words</span> = content words → stress them!</div>
+          <div>🔇 Small words like <em>a</em>, <em>for</em>, <em>to</em> → say softly and fast</div>
+          <div>🔄 Do it twice — swap roles on round 2!</div>
+          <div>💡 Improvise! Change the item (shoes? coat?) or the price!</div>
+        </div>
+      </div>
+    </div>
+    <div class="rp-tip">🌟 Challenge: Try the dialogue again <strong>without looking</strong> at the script. Focus on sounding natural!</div>
+  </div></div>`;
+}
+
+function buildHTML(){
+  return `<div class="slide build-slide">
+  <div class="s-head" style="background:#00695C">Build It 🔨 — Make your own sentences <span class="badge">Student 🗣️ · 5 min</span></div>
+  <div class="build-body">
+    <div class="build-prompt">
+      <h2>Tell me about your day or this week!</h2>
+      <p>Use <strong>at least 3–4 sentences</strong> in English. After each one, identify the content words and say it again with clear stress.</p>
+    </div>
+    <div class="build-steps">
+      <div class="build-step">
+        <div class="build-step-num">1</div>
+        <div class="build-step-text">Say a sentence about what you did</div>
+      </div>
+      <div class="build-step">
+        <div class="build-step-num">2</div>
+        <div class="build-step-text">Point out which words are content words</div>
+      </div>
+      <div class="build-step">
+        <div class="build-step-num">3</div>
+        <div class="build-step-text">Say it again, stressing them clearly</div>
+      </div>
+    </div>
+    <div class="build-example">
+      <strong>Example:</strong><br>
+      "I <strong style="color:#00695C">WENT</strong> to a <strong style="color:#00695C">NICE RESTAURANT</strong> for <strong style="color:#00695C">LUNCH</strong>."<br>
+      → Content words: <span style="color:#00695C;font-weight:700">went (verb) · nice (adj) · restaurant (noun) · lunch (noun)</span>
+    </div>
+    <div class="teacher-note">📝 <strong>Teacher note:</strong> After each sentence, ask "Which words did you stress?" Use <strong>recasting</strong> to model correct stress naturally — repeat the sentence back with the right stress, without explicitly correcting.</div>
+  </div></div>`;
+}
+
+function quizHTML(){
+  const qs = QUIZ.map((q,i)=>{
+    const id=`qrev-${i}`;
+    const opts=q.opts.map(o=>`<div class="q-opt">${o}</div>`).join('');
+    const revealOpts=q.opts.map((o,ci)=>`<div class="qr-opt${ci===q.ans?' correct':''}">${o}</div>`).join('');
+    return `<div class="q-box">
+      <div class="q-num">Question ${i+1} of ${QUIZ.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts">${opts}</div>
+      <button class="q-reveal-btn" onclick="toggleAns(this,'${id}')">▼ 答えを見る</button>
+      <div class="q-ans-reveal" id="${id}">
+        <div class="qr-opts">${revealOpts}</div>
+        <div class="qr-hint">💡 ${q.hint}</div>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="slide quizq-slide">
+  <div class="s-head" style="background:#004D40">Mini Quiz <span class="badge">Think first! 🤔</span></div>
+  <div class="s-body" style="flex-direction:column;gap:8px;overflow-y:auto">
+    <div class="think-banner">🤔 Answer each question in your head first, then press "答えを見る" to check!</div>
+    <div class="q-grid" style="padding-bottom:8px">${qs}</div>
+  </div></div>`;
+}
+
+function summaryHTML(){
+  const cards=[
+    {icon:'📢',title:'Content Words = STRESS',body:'Nouns, main verbs, adjectives, adverbs, negative auxiliaries — make these louder, longer, higher.',color:'#00695C'},
+    {icon:'🔇',title:'Function Words = reduce',body:'Articles, prepositions, pronouns, auxiliaries, conjunctions — keep these short, soft, and fast.',color:'#455A64'},
+    {icon:'🔦',title:'Spotlight rule',body:'Only a few words per sentence carry the spotlight. The rest fade into the background. This IS English rhythm!',color:'#00838F'},
+  ];
+  const cardHTML=cards.map(c=>`
+    <div class="sum-card" style="background:${c.color}">
+      <div class="sum-card-icon">${c.icon}</div>
+      <div class="sum-card-title">${c.title}</div>
+      <div class="sum-card-body">${c.body}</div>
+    </div>`).join('');
+  return `<div class="slide summary-slide">
+  <div class="s-head" style="background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.09)">
+    <span style="color:#fff">Summary — Content &amp; Function Words（内容語と機能語）</span>
+    <span class="badge" style="background:rgba(255,255,255,.1);color:#80CBC4">Lesson Complete 🎉</span>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px 26px">
+    <div class="sum-cards">${cardHTML}</div>
+    <div class="sum-foot">
+      <strong>Practice tip:</strong> When reading any English text, try <strong>underlining the content words first</strong> — then read it aloud. You'll immediately sound more natural!
+    </div>
+  </div></div>`;
+}
+
+function freeConvHTML(){
+  return `<div class="slide freeconv-slide">
+  <div class="s-head" style="background:#0d1a18;border-top:2px solid rgba(0,105,92,.35)">
+    <span style="color:#80CBC4">💬 Free Conversation</span>
+    <span class="badge" style="background:rgba(0,105,92,.2);color:#80CBC4">8 min — Student leads!</span>
+  </div>
+  <div class="fc-body">
+    <div class="fc-badge">Today's Topic</div>
+    <div class="fc-topic">Plans &amp; Preferences</div>
+    <div class="fc-questions">
+      <div class="fc-q">🗓️ What are you planning to do this weekend? Tell me about it in detail!</div>
+      <div class="fc-q">🍽️ What kind of food do you really love? What do you usually eat for dinner?</div>
+      <div class="fc-q">✈️ If you could travel anywhere, where would you go? What would you want to see there?</div>
+    </div>
+    <p class="fc-note">Don't stop to think about grammar — just talk! The teacher will listen for natural content word stress.</p>
+    <div class="fc-teacher">
+      <strong>Teacher guide:</strong> Let the student speak freely for 1–2 minutes per question. After each response, pick 1–2 sentences and ask: "Which words did you stress?" Use <strong>recasting</strong> — repeat their sentence with correct stress naturally, without explicit correction. This keeps conversation flowing while reinforcing the lesson.
+    </div>
+  </div></div>`;
+}
+
+// ═══════════════════════════════════════════
+//  BUILD & NAV
+// ═══════════════════════════════════════════
+function build(){
+  const c=document.getElementById('slides');
+  let h=titleHTML()+warmupHTML()+conceptHTML()+spotHTML();
+  h+=tryit1HTML()+tryit2HTML()+roleplayHTML()+buildHTML();
+  h+=quizHTML()+summaryHTML()+freeConvHTML();
+  c.innerHTML=h;
+}
+
+function toggleAns(btn,id){
+  const el=document.getElementById(id);
+  const open=el.classList.toggle('open');
+  btn.textContent=open?'▲ 隠す':'▼ 答えを見る';
+}
+
+let cur=0,SL=[];
+function updateUI(){
+  SL=document.querySelectorAll('.slide');
+  SL.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  document.getElementById('counter').textContent=`${cur+1} / ${SL.length}`;
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').disabled=cur===SL.length-1;
+  document.getElementById('progress').style.width=`${((cur+1)/SL.length)*100}%`;
+}
+function move(d){if(cur+d>=0&&cur+d<SL.length){cur+=d;updateUI();}}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')move(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')move(-1);
+});
+build();updateUI();
+</script>
+</body>
+</html>
