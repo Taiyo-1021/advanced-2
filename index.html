@@ -335,7 +335,7 @@ function spotHTML(){
     const id=`spot-${i}`;
     return `<div class="spot-box">
       <div class="spot-sent">${s.sent}</div>
-      <button class="spot-reveal-btn" onclick="toggleAns(this,'${id}')">▼ 答えを見る</button>
+      <button class="spot-reveal-btn" onclick="toggleAns(this,'${id}')">Show Answer</button>
       <div class="spot-ans" id="${id}">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#00695C;margin-bottom:4px">Content words:</div>
         <div style="font-size:clamp(12px,1.35vw,15px);margin-bottom:4px">${s.marked}</div>
@@ -457,7 +457,7 @@ function quizHTML(){
       <div class="q-num">Question ${i+1} of ${QUIZ.length}</div>
       <div class="q-text">${q.q}</div>
       <div class="q-opts">${opts}</div>
-      <button class="q-reveal-btn" onclick="toggleAns(this,'${id}')">▼ 答えを見る</button>
+      <button class="q-reveal-btn" onclick="toggleAns(this,'${id}')">Show Answer</button>
       <div class="q-ans-reveal" id="${id}">
         <div class="qr-opts">${revealOpts}</div>
         <div class="qr-hint">💡 ${q.hint}</div>
@@ -467,7 +467,7 @@ function quizHTML(){
   return `<div class="slide quizq-slide">
   <div class="s-head" style="background:#004D40">Mini Quiz <span class="badge">Think first! 🤔</span></div>
   <div class="s-body" style="flex-direction:column;gap:8px;overflow-y:auto">
-    <div class="think-banner">🤔 Answer each question in your head first, then press "答えを見る" to check!</div>
+    <div class="think-banner">🤔 Answer each question in your head first, then press "Show Answer" to check!</div>
     <div class="q-grid" style="padding-bottom:8px">${qs}</div>
   </div></div>`;
 }
@@ -532,7 +532,7 @@ function build(){
 function toggleAns(btn,id){
   const el=document.getElementById(id);
   const open=el.classList.toggle('open');
-  btn.textContent=open?'▲ 隠す':'▼ 答えを見る';
+  btn.textContent=open?'Hide':'Show Answer';
 }
 
 let cur=0,SL=[];
